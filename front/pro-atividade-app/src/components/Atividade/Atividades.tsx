@@ -6,8 +6,8 @@ interface AtividadeProps {
     prioridade: string; 
   };
   deleteAtividade: (id: number) => void;
+  pegarAtividade: (id: number) => void;
 }
-
 
 export default function Atividade(props: AtividadeProps) {
 
@@ -37,8 +37,6 @@ export default function Atividade(props: AtividadeProps) {
     }
   }
 
-
-
   return (
     <div className={"card mb-2 shadow-sm border-" + prioridadeIcon(props.ativ.prioridade)}>
             <div className="card-body">
@@ -55,7 +53,7 @@ export default function Atividade(props: AtividadeProps) {
               </div>
               <p className="card-text">{props.ativ.descricao}</p>
               <div className="d-flex justify-content-end border-top pt-2 m-0">
-                <button className="btn btn-sm btn-outline-primary me-2">
+                <button className="btn btn-sm btn-outline-primary me-2" onClick={() => props.pegarAtividade(props.ativ.id)}>
                   <i className="fas fa-pen me-2"></i>
                   Editar
                 </button>
