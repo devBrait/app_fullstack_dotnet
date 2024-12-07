@@ -82,10 +82,10 @@ export default function AtividadeForm(props: AtividadeFormProps) {
           value={prioridade}
           onChange={(e) => setPrioridade(e.target.value)}
         >
-          <option value="0">Selecionar...</option>
-          <option value="1">Baixa</option>
-          <option value="2">Normal</option>
-          <option value="3">Alta</option>
+          <option value="NaoDefinido">Selecionar...</option>
+          <option value="Baixa">Baixa</option>
+          <option value="Normal">Normal</option>
+          <option value="Alta">Alta</option>
         </select>
       </div>
       <div className="col-md-6">

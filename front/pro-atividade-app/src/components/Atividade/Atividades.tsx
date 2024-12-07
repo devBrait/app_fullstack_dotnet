@@ -13,12 +13,10 @@ export default function Atividade(props: AtividadeProps) {
 
   function prioridadeLabel(param: string) {
     switch (param) {
-      case '1':
-        return 'Baixa';
-      case '2':
-        return 'Normal';
-      case '3':
-        return 'Alta';
+      case 'Baixa':
+      case 'Normal':
+      case 'Alta':
+        return param;
       default:
         return 'Não definido';
     }
@@ -26,11 +24,11 @@ export default function Atividade(props: AtividadeProps) {
 
   function prioridadeIcon(param: string, icon: boolean = false) {
     switch (param) {
-      case '1':
+      case 'Baixa':
         return icon ? 'smile' : 'success';
-      case '2':
+      case 'Normal':
         return icon ? 'meh' : 'dark';
-      case '3':
+      case 'Alta':
         return icon ? 'frown' : 'warning';
       default:
         return 'Não definido';

@@ -1,6 +1,7 @@
-import { useState } from "react";
-import Form from "./components/Atividade/Form";
-import Lista from "./components/Atividade/Lista";
+import { useEffect, useState } from "react"
+import Form from "./components/Atividade/Form"
+import Lista from "./components/Atividade/Lista"
+import api from './components/api/atividade'
 
 // Definição do tipo Atividade
 interface Atividade {
@@ -10,24 +11,30 @@ interface Atividade {
   descricao: string;
 }
 
-// Estado inicial com uma atividade de exemplo
-const initialState: Atividade[] = [
-  {
-    id: 1,
-    titulo: 'Primeiro título',
-    prioridade: '1',
-    descricao: 'Primeira atividade'
-  },
-];
-
 export default function App() {
-  const [atividades, setAtividades] = useState<Atividade[]>(initialState)
+  const [atividades, setAtividades] = useState<Atividade[]>([])
   const [atividade, setAtividade] = useState<Atividade | undefined>(undefined)
 
   // Função para adicionar uma nova atividade
-  function addAtividade(novaAtividade: Atividade) {
-    setAtividades([...atividades, novaAtividade])
+  const addAtividade = async (novaAtividade: Atividade) =>  {
+    const response = await api.post('atividade', novaAtividade)
+    setAtividades([...atividades, response.data])
   }
+
+  const pegaTodasAtividades = async () => {
+    const response = await api.get('atividade')
+    return response.data
+  }
+
+  useEffect(() => {
+    const getAtividades = async () => {
+      const todasAtividades = pegaTodasAtividades()
+      if(todasAtividades) {
+        setAtividades(await todasAtividades)
+      }
+    }
+    getAtividades()
+  }, [])
 
   // Função para atualizar uma atividade existente
   function atualizarAtividade(atividadeAtualizada: Atividade) {
@@ -70,5 +77,5 @@ export default function App() {
         pegarAtividade={pegarAtividade}
       />
     </>
-  );
+  )
 }

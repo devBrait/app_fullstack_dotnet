@@ -1,12 +1,15 @@
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using ProAtividade.API.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDbContext<DataContext>(options 
-    => options.UseSqlite(builder.Configuration.GetConnectionString("Default")));
+builder.Services.AddDbContext<DataContext>(x 
+    => x.UseSqlite(builder.Configuration.GetConnectionString("Default")));
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+                .AddJsonOptions(x =>  x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
+                
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -18,6 +21,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
 app.UseHttpsRedirection();
 
