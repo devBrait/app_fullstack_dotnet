@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react"
 
 // Definição dos tipos para as props
 interface Atividade {
-  id: number;
-  titulo: string;
-  prioridade: string;
-  descricao: string;
+  id: number
+  titulo: string
+  prioridade: string
+  descricao: string
 }
 
 interface AtividadeFormProps {
@@ -23,18 +23,20 @@ export default function AtividadeForm(props: AtividadeFormProps) {
   const [descricao, setDescricao] = useState<string>('')
   const [editando, setEditando] = useState<boolean>(false)
 
-  // Atualiza os campos quando uma atividade existente é selecionada para edição
   useEffect(() => {
     if (props.ativSelecionada) {
       setId(props.ativSelecionada.id)
       setTitulo(props.ativSelecionada.titulo)
       setPrioridade(props.ativSelecionada.prioridade)
       setDescricao(props.ativSelecionada.descricao)
-      setEditando(true)// Define o estado de edição como verdadeiro
+      
+      if(props.ativSelecionada.id > 0){
+        setEditando(true)
+      }
     } else {
       limparCampos()
     }
-  }, [props.ativSelecionada]);
+  }, [props.ativSelecionada])
 
   const handleAddAtividade = (e: React.FormEvent) => {
     e.preventDefault()
@@ -43,7 +45,7 @@ export default function AtividadeForm(props: AtividadeFormProps) {
       titulo,
       prioridade,
       descricao,
-    };
+    }
 
     props.addAtividade(novaAtividade)
     limparCampos()
@@ -58,7 +60,6 @@ export default function AtividadeForm(props: AtividadeFormProps) {
       descricao,
     }
     props.atualizarAtividade(atividadeAtualizada)
-    limparCampos()
     setEditando(false)
   }
 
@@ -124,8 +125,8 @@ export default function AtividadeForm(props: AtividadeFormProps) {
             </button>
           </>
         ) : (
-          <button className="btn btn-outline-secondary" type="submit">
-            + Atividade
+          <button className="btn btn-outline-success" type="submit">
+            Salvar
           </button>
         )}
       </div>

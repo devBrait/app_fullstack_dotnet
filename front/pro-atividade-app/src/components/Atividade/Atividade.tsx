@@ -1,12 +1,12 @@
 interface AtividadeProps {
   ativ: {
-    id: number; 
-    titulo: string;
-    descricao: string;
-    prioridade: string; 
-  };
-  deleteAtividade: (id: number) => void;
-  pegarAtividade: (id: number) => void;
+    id: number 
+    titulo: string
+    descricao: string
+    prioridade: string 
+  }
+  handleConfirmModal: (id: number) => void
+  pegarAtividade: (id: number) => void
 }
 
 export default function Atividade(props: AtividadeProps) {
@@ -16,22 +16,22 @@ export default function Atividade(props: AtividadeProps) {
       case 'Baixa':
       case 'Normal':
       case 'Alta':
-        return param;
+        return param
       default:
-        return 'Não definido';
+        return 'Não definido'
     }
   }
 
   function prioridadeIcon(param: string, icon: boolean = false) {
     switch (param) {
       case 'Baixa':
-        return icon ? 'smile' : 'success';
+        return icon ? 'smile' : 'success'
       case 'Normal':
-        return icon ? 'meh' : 'dark';
+        return icon ? 'meh' : 'dark'
       case 'Alta':
-        return icon ? 'frown' : 'warning';
+        return icon ? 'frown' : 'warning'
       default:
-        return 'Não definido';
+        return 'Não definido'
     }
   }
 
@@ -55,12 +55,12 @@ export default function Atividade(props: AtividadeProps) {
                   <i className="fas fa-pen me-2"></i>
                   Editar
                 </button>
-                <button className="btn btn-sm btn-outline-danger" onClick={() => props.deleteAtividade(props.ativ.id)}>
+                <button className="btn btn-sm btn-outline-danger" onClick={() => props.handleConfirmModal(props.ativ.id)}>
                   <i className="fas fa-trash me-2"></i>
                   Deletar
                 </button>
               </div>
             </div>
-          </div>
+      </div>
   )
 }

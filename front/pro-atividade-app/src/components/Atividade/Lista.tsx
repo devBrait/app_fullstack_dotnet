@@ -1,17 +1,17 @@
-import Atividade from "./Atividades";
+import Atividade from "./Atividade"
 
 // Definindo a interface para as props do componente Lista
 interface Atividade {
-  id: number; 
-  titulo: string;
-  descricao: string;
-  prioridade: string;
+  id: number 
+  titulo: string
+  descricao: string
+  prioridade: string
 }
 
 interface ListaProps {
-  atividades: Atividade[];
-  deleteAtividade: (id: number) => void;
-  pegarAtividade: (id: number) => void;
+  atividades: Atividade[]
+  handleConfirmModal: (id: number) => void
+  pegarAtividade: (id: number) => void
 }
 
 
@@ -19,7 +19,7 @@ export default function Lista(props: ListaProps) {
   return (
     <div className="mt-3">
     {props.atividades.map((ativ) => (
-      <Atividade key={ativ.id} ativ={ativ} deleteAtividade={props.deleteAtividade} pegarAtividade={props.pegarAtividade}/>
+      <Atividade key={ativ.id} ativ={ativ} handleConfirmModal={props.handleConfirmModal} pegarAtividade={props.pegarAtividade}/>
     ))}
   </div>
   )
