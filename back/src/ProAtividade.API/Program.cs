@@ -1,11 +1,19 @@
 using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
-using ProAtividade.API.Data;
+using ProAtividade.Data.Context;
+using ProAtividade.Data.Repositories;
+using ProAtividade.Domain.Interfaces.Repositories;
+using ProAtividade.Domain.Interfaces.Services;
+using ProAtividade.Domain.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<DataContext>(x 
     => x.UseSqlite(builder.Configuration.GetConnectionString("Default")));
+
+builder.Services.AddScoped<IAtividadeRepository, AtividadeRepository>();
+builder.Services.AddScoped<IGeralRepository, GeralRepository>();
+builder.Services.AddScoped<IAtividadeService, AtividadeService>();
 
 builder.Services.AddControllers()
                 .AddJsonOptions(x =>  x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));

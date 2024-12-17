@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using ProAtividade.API.Data;
-using ProAtividade.API.Models;
+using ProAtividade.Domain.Entities;
+using ProAtividade.Domain.Interfaces.Services;
+
 
 namespace ProAtividade.API.Controllers;
 
@@ -8,67 +9,97 @@ namespace ProAtividade.API.Controllers;
 [Route("api/[controller]")]
 public class AtividadeController : ControllerBase
 {
-    private readonly DataContext _context;
+    private readonly IAtividadeService _atividadeService;
     
-    public AtividadeController(DataContext context)
+    public AtividadeController(IAtividadeService atividadeService)
     {
-            _context = context;
-        
+        _atividadeService = atividadeService;
     }
 
     [HttpGet]
-    public IEnumerable<Atividade> Get()
+    public async Task<IActionResult> Get()
     {
-        return _context.Atividades;
+       try
+       {
+            var atividades = await _atividadeService.PegarTodasAtividadesAsync();
+            return Ok(atividades);
+            
+       }catch(Exception ex)
+       {
+           return BadRequest(ex.Message);
+       }
     }   
 
     
     [HttpGet("{id}")]
-    public Atividade Get(int id)
+    public async Task<IActionResult> Get(int id)
     {
-        var atividade = _context.Atividades.FirstOrDefault(x => x.Id == id);
-        if (atividade == null) return new Atividade();
-        return atividade;
+       try
+       {
+            var atividade = await _atividadeService.PegarAtividadePorIdAsync(id);
+            return Ok(atividade);
+
+       }catch(Exception ex)
+       {
+           return BadRequest(ex.Message);
+       }
     }   
 
     [HttpPost]
-    public Atividade Post(Atividade atividade)
+    public async Task<IActionResult> Post(Atividade atividade)
     {
-        _context.Atividades.Add(atividade);
-
-        if(_context.SaveChanges() > 0)
+        try
         {
-            return atividade;
-        }
+            var atividadeSalva = await _atividadeService.AdicionarAtividade(atividade); 
+            return Ok(atividadeSalva);
 
-        throw new Exception("Não foi possível adicionar a atividade");
+        }catch(Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
 
     [HttpPut("{id}")]
-    public Atividade Put(int id, Atividade atividade)
+    public async Task<IActionResult> Put(int id, Atividade atividade)
     {
-       if(atividade.Id != id) throw new Exception("Id da atividade não corresponde ao id da requisição");
+        try
+        {
+            if(id != atividade.Id)
+            {
+                return Conflict("Id da requisição diferente do Id da atividade");
+            }
 
-       _context.Update(atividade);
+            var atividadeAtualizada = await _atividadeService.AtualizarAtividade(atividade);
+            return Ok(atividadeAtualizada);
 
-       if(_context.SaveChanges() > 0)
-       {
-           return _context.Atividades.FirstOrDefault(x => x.Id == id) ?? throw new Exception("Atividade não encontrada");
-       }
-
-        throw new Exception("Não foi possível atualizar a atividade");
+        }catch(Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
 
     [HttpDelete("{id}")]
-    public Boolean Delete(int id)
+    public async Task<IActionResult> Delete(int id)
     {
-        _context.Remove(_context.Atividades.FirstOrDefault(x => x.Id == id) ?? throw new Exception("Atividade não encontrada"));
-
-        if(_context.SaveChanges() > 0)
+        try
         {
-            return true;
-        }
+            var atividade = await _atividadeService.PegarAtividadePorIdAsync(id);
+            if(atividade == null)
+            {
+                return NotFound();
+            }
 
-        return false;
+            if(await _atividadeService.DeletarAtividade(id))
+            {
+                return Ok(new { message = "Atividade deletada" });
+            }else
+            {
+                return BadRequest("Ocorreu um problema ao deletar a atividade");
+            } 
+
+        }catch(Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
 }
