@@ -9,7 +9,7 @@ interface AtividadeProps {
   pegarAtividade: (id: number) => void
 }
 
-export default function Atividade(props: AtividadeProps) {
+export default function Item(props: AtividadeProps) {
 
   function prioridadeLabel(param: string) {
     switch (param) {

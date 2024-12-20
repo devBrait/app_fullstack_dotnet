@@ -1,4 +1,4 @@
-import Atividade from "./Atividade"
+import Item from "./Item"
 
 // Definindo a interface para as props do componente Lista
 interface Atividade {
@@ -19,7 +19,7 @@ export default function Lista(props: ListaProps) {
   return (
     <div className="mt-3">
     {props.atividades.map((ativ) => (
-      <Atividade key={ativ.id} ativ={ativ} handleConfirmModal={props.handleConfirmModal} pegarAtividade={props.pegarAtividade}/>
+      <Item key={ativ.id} ativ={ativ} handleConfirmModal={props.handleConfirmModal} pegarAtividade={props.pegarAtividade}/>
     ))}
   </div>
   )
